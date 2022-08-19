@@ -2,7 +2,7 @@
   "host": "119.196.91.155",
   "port": "43306",
   "user": "root",
-  "password": "",
+  "password": "xpavm007",
   "database": "newdb",
   "connectionLimit": 10
 }

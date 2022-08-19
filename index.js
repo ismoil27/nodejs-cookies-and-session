@@ -21,6 +21,17 @@ app.use(
 );
 
 app.use(cookieParser());
+app.use(
+  session({
+    key: "userId",
+    secret: "secretword",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 60 * 60 * 24,
+    },
+  })
+);
 
 app.post("/register", (req, res) => {
   const name = req.body.name;
@@ -59,6 +70,8 @@ app.post("/login", (req, res) => {
       if (result.length > 0) {
         bcrypt.compare(password, result[0].password, (err, response) => {
           if (response) {
+            req.session.user = result;
+            console.log(req.session.user);
             res.send(result);
           } else {
             res.send({ message: `Wrong credentials` });
