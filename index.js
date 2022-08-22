@@ -59,29 +59,26 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  db.query(
-    "select * from users where email = ?;",
+  const getLoginEmail = "select * from users where email = ?;";
 
-    email,
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-      if (result.length > 0) {
-        bcrypt.compare(password, result[0].password, (err, response) => {
-          if (response) {
-            req.session.user = result;
-            console.log(req.session.user);
-            res.send(result);
-          } else {
-            res.send({ message: `Wrong credentials` });
-          }
-        });
-      } else {
-        res.send({ message: `User does not exist` });
-      }
+  db.query(getLoginEmail, email, (err, result) => {
+    if (err) {
+      res.send({ err: err });
     }
-  );
+    if (result.length > 0) {
+      bcrypt.compare(password, result[0].password, (err, response) => {
+        if (response) {
+          req.session.user = result;
+          console.log(req.session.user);
+          res.send(result);
+        } else {
+          res.send({ message: `Wrong credentials` });
+        }
+      });
+    } else {
+      res.send({ message: `User does not exist` });
+    }
+  });
 });
 
 app.listen(PORT, () => {
