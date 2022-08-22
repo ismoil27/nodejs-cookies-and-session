@@ -43,13 +43,12 @@ app.post("/register", (req, res) => {
       console.log(err);
     }
 
-    db.query(
-      "insert into users (name, email, password) values (?, ?, ?)",
-      [name, email, hash],
-      (err, result) => {
-        console.log(err);
-      }
-    );
+    const insertUser =
+      "insert into users (name, email, password) values (?, ?, ?)";
+
+    db.query(insertUser, [name, email, hash], (err, result) => {
+      console.log(err);
+    });
   });
   res.send({ message: req.body });
 });
